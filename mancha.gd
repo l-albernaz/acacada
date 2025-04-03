@@ -6,6 +6,9 @@ var moving = false
 var can_move = false  
 var move_count = 0  
 const MAX_MOVES = 3  
+var speed = 300  
+
+@onready var game_manager = get_parent()  
 
 func enable_control(state):
 	can_move = state  
@@ -15,6 +18,10 @@ func enable_control(state):
 func _ready():
 	position = position.snapped(Vector2(TILE_SIZE, TILE_SIZE))  
 	add_to_group("players")  
+
+	# **Desativa a colisão da Mancha com o Lupu**
+	set_collision_mask_value(2, false)  # Supondo que Lupu esteja na layer 2
+	set_collision_layer_value(2, false)
 
 func _unhandled_input(event):
 	if not can_move or moving:
@@ -35,26 +42,32 @@ func _unhandled_input(event):
 		move()
 
 func move():
-	var target_position = position + (direction * TILE_SIZE)
+	if moving:
+		return  
 
-	var collision = move_and_collide(direction * TILE_SIZE)
-	if collision:
-		return 
-	
 	moving = true
-	
-	var tween = get_tree().create_tween()
-	tween.tween_property(self, "position", target_position, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_callback(_on_move_complete)
+	velocity = direction * speed  
+
+	await get_tree().create_timer(0.2).timeout  
+
+	_on_move_complete()
+
+func _physics_process(delta):
+	if moving:
+		move_and_slide()
 
 func _on_move_complete():
-	# Atualiza o overlay e espera o efeito terminar antes de continuar
-	await get_parent().update_overlay()
-
-	await get_tree().create_timer(1.0).timeout  # Espera 1 segundo após o efeito
-	
 	moving = false
+	velocity = Vector2.ZERO  
 	move_count += 1  
 
+	check_same_tile()
+
 	if move_count >= MAX_MOVES:
-		get_parent().end_turn()
+		game_manager.end_turn()
+
+func check_same_tile():
+	var players = get_tree().get_nodes_in_group("players")
+	for player in players:
+		if player != self and player.position == self.position:
+			game_manager.end_game(player)

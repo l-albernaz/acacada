@@ -53,3 +53,8 @@ func update_overlay():
 
 	# Aguarda a conclusão da transição antes de continuar
 	await tween.finished
+
+func end_game(player):
+	print("O jogo acabou! A Mancha tocou Lupu e ele desapareceu!")
+	player.queue_free()  # Remove Lupu do jogo
+	get_tree().quit()  # Fecha o jogo (ou implemente uma tela de game over)
