@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://c7yc1kvehjmtf"]
+
+[ext_resource type="Script" uid="uid://g65jiw4t15y" path="res://mancha.gd" id="1_bn24j"]
+[ext_resource type="Texture2D" uid="uid://y1glj58yrv2o" path="res://assets/Mancha.png" id="1_gyg3d"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gyg3d"]
+radius = 60.0
+height = 122.0
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+disable_mode = 1
+slide_on_ceiling = false
+platform_floor_layers = 4294967040
+platform_wall_layers = 1
+script = ExtResource("1_bn24j")
+
+[node name="Mancha" type="Sprite2D" parent="."]
+position = Vector2(-0.999996, 0.999992)
+scale = Vector2(0.12207, 0.12207)
+texture = ExtResource("1_gyg3d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-4, 2)
+shape = SubResource("CapsuleShape2D_gyg3d")

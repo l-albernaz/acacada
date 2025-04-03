@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7x8pyoddospo"]
+
+[ext_resource type="Texture2D" uid="uid://c18xpx6e6xbbs" path="res://assets/Bosquetodo.png" id="1_p0ybc"]
+[ext_resource type="Script" uid="uid://yhc1emv0bocp" path="res://Scenes/chess.gd" id="2_psm7c"]
+
+[node name="Board" type="Sprite2D"]
+position = Vector2(575, 330)
+texture = ExtResource("1_p0ybc")
+script = ExtResource("2_psm7c")
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="dots" type="Node2D" parent="."]
+
+[node name="turn" type="Sprite2D" parent="."]
