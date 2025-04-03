@@ -5,7 +5,7 @@ var direction = Vector2.ZERO
 var moving = false  
 var can_move = false  
 var move_count = 0  
-const MAX_MOVES = 3  
+var max_moves = 3  
 var speed = 300  
 
 @onready var game_manager = get_parent()  
@@ -14,6 +14,7 @@ func enable_control(state):
 	can_move = state  
 	if state:
 		move_count = 0  
+		game_manager.update_steps_label()  # Atualiza os passos restantes na interface
 
 func _ready():
 	position = position.snapped(Vector2(TILE_SIZE, TILE_SIZE))  
@@ -61,13 +62,15 @@ func _on_move_complete():
 	velocity = Vector2.ZERO  
 	move_count += 1  
 
+	game_manager.update_steps_label()  # Atualiza o contador de passos
+
 	check_same_tile()
 
-	if move_count >= MAX_MOVES:
+	if move_count >= max_moves:
 		game_manager.end_turn()
 
 func check_same_tile():
 	var players = get_tree().get_nodes_in_group("players")
 	for player in players:
 		if player != self and player.position == self.position:
-			game_manager.end_game(player)
+			game_manager.end_game("Mancha")  # Mancha venceu!

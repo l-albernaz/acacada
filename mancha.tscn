@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://y1glj58yrv2o" path="res://assets/Mancha.png" id="1_gyg3d"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gyg3d"]
-radius = 49.0
-height = 108.0
+radius = 56.0
+height = 112.0
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 disable_mode = 1
@@ -20,5 +20,5 @@ scale = Vector2(0.12207, 0.12207)
 texture = ExtResource("1_gyg3d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-4, 2)
+position = Vector2(1, 22)
 shape = SubResource("CapsuleShape2D_gyg3d")

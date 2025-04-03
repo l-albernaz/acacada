@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://e6cw6pqf26js"]
+
+[ext_resource type="Texture2D" uid="uid://ccisl2x8dlimy" path="res://assets/fumaça.png" id="1_ug3rn"]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+
+[node name="Lupunoctis" type="Sprite2D" parent="."]
+position = Vector2(-2.95313, -4.95313)
+scale = Vector2(0.13858, 0.13858)
+texture = ExtResource("1_ug3rn")
