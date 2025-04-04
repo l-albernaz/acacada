@@ -641,6 +641,7 @@ sources/0 = SubResource("TileSetAtlasSource_fc0e3")
 [node name="Node2D" type="Node2D"]
 position = Vector2(-57, 19)
 script = ExtResource("1_7jktm")
+shadow_win_threshold = 9
 
 [node name="água" type="TileMapLayer" parent="."]
 position = Vector2(64, 39)
@@ -659,7 +660,8 @@ position = Vector2(514, 248)
 [node name="lupu" parent="." instance=ExtResource("4_fc0e3")]
 z_index = 1
 position = Vector2(720, 272)
-max_moves = 3
+shadows_per_turn = 3
+rounds_before_shadows = 1
 
 [node name="TurnOverlay" type="ColorRect" parent="."]
 z_index = 3
