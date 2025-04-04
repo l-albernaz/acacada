@@ -65,6 +65,10 @@ func move():
 	tween.tween_property(self, "position", target_position, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(_on_move_complete)
 
+	# Verificar se o Lupu está preso após o movimento
+	if check_if_trapped():
+		game_manager.end_game()  # Finaliza o jogo se estiver preso
+
 func _on_move_complete():
 	moving = false
 	move_count += 1
@@ -83,21 +87,17 @@ func _on_move_complete():
 		game_manager.end_turn()
 
 func create_shadows():
-	var possible_positions = [
-		position + Vector2(0, -TILE_SIZE),
-		position + Vector2(0, TILE_SIZE),
-		position + Vector2(-TILE_SIZE, 0),
-		position + Vector2(TILE_SIZE, 0),
-		position + Vector2(-TILE_SIZE, -TILE_SIZE),
-		position + Vector2(TILE_SIZE, -TILE_SIZE),
-		position + Vector2(-TILE_SIZE, TILE_SIZE),
-		position + Vector2(TILE_SIZE, TILE_SIZE)
-	]
-
 	var available_positions = []
-	for pos in possible_positions:
-		if not is_position_blocked(pos) and not is_shadow_present(pos):  
-			available_positions.append(pos)
+
+	for x_offset in range(-2, 3):
+		for y_offset in range(-2, 3):
+			var offset = Vector2(x_offset, y_offset)
+			if offset == Vector2.ZERO:
+				continue  # Ignora a posição atual do personagem
+			
+			var pos = position + offset * TILE_SIZE
+			if not is_position_blocked(pos) and not is_shadow_present(pos):
+				available_positions.append(pos)
 
 	available_positions.shuffle()
 	var selected_positions = available_positions.slice(0, shadows_per_turn)
@@ -109,9 +109,15 @@ func create_shadows():
 		get_parent().add_child(shadow)
 
 func is_position_blocked(target_pos) -> bool:
+	# Ignora colisões com o próprio Lupu
+	if self.position == target_pos:
+		return false
+
+	# Verifica as colisões com objetos sólidos
 	for obj in get_tree().get_nodes_in_group("solid_objects"):
 		if obj.position == target_pos:
 			return true
+
 	return false
 
 func is_shadow_present(target_pos) -> bool:
@@ -119,3 +125,20 @@ func is_shadow_present(target_pos) -> bool:
 		if shadow.position == target_pos:
 			return true
 	return false
+
+# Método para verificar se o Lupu está preso
+func check_if_trapped() -> bool:
+	var directions = [
+		Vector2(0, -1),  # Para cima
+		Vector2(0, 1),   # Para baixo
+		Vector2(-1, 0),  # Para a esquerda
+		Vector2(1, 0)    # Para a direita
+	]
+	
+	# Verifica se todas as direções estão bloqueadas
+	for dir in directions:
+		var target_position = position + dir * TILE_SIZE
+		if not is_position_blocked(target_position):
+			return false  # Se alguma direção não estiver bloqueada, Lupu não está preso
+	
+	return true  # Se todas as direções estão bloqueadas, Lupu está preso

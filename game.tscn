@@ -634,14 +634,14 @@ texture = ExtResource("2_feb5d")
 3:3/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_ryrav"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 4
+physics_layer_0/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_7jktm")
 sources/0 = SubResource("TileSetAtlasSource_fc0e3")
 
 [node name="Node2D" type="Node2D"]
 position = Vector2(-57, 19)
 script = ExtResource("1_7jktm")
-shadow_win_threshold = 9
 
 [node name="água" type="TileMapLayer" parent="."]
 position = Vector2(64, 39)
@@ -653,17 +653,22 @@ tile_map_data = PackedByteArray("AAAIAAQAAAAAAAIAAAAIAAUAAAAAAAMAAAAIAAYAAAAAAAQ
 tile_set = SubResource("TileSet_ryrav")
 
 [node name="mancha" parent="." groups=["solid_objects"] instance=ExtResource("3_feb5d")]
-visibility_layer = 7
-z_index = 2
+light_mask = 0
+z_index = 1
 position = Vector2(514, 248)
+collision_layer = 0
+collision_mask = 4
 
 [node name="lupu" parent="." instance=ExtResource("4_fc0e3")]
-z_index = 1
 position = Vector2(720, 272)
-shadows_per_turn = 3
+collision_mask = 4
+floor_stop_on_slope = false
+floor_block_on_wall = false
 rounds_before_shadows = 1
+hide_lupu_after_move = false
 
 [node name="TurnOverlay" type="ColorRect" parent="."]
+visible = false
 z_index = 3
 offset_left = -45.0
 offset_top = -50.0
