@@ -96,7 +96,7 @@ func create_shadows():
 
 	var available_positions = []
 	for pos in possible_positions:
-		if not is_position_blocked(pos):
+		if not is_position_blocked(pos) and not is_shadow_present(pos):  
 			available_positions.append(pos)
 
 	available_positions.shuffle()
@@ -105,11 +105,17 @@ func create_shadows():
 	for pos in selected_positions:
 		var shadow = shadow_scene.instantiate()
 		shadow.position = pos
-		shadow.add_to_group("shadows")  # <- IMPORTANTE!
+		shadow.add_to_group("shadows")  
 		get_parent().add_child(shadow)
 
 func is_position_blocked(target_pos) -> bool:
 	for obj in get_tree().get_nodes_in_group("solid_objects"):
 		if obj.position == target_pos:
+			return true
+	return false
+
+func is_shadow_present(target_pos) -> bool:
+	for shadow in get_tree().get_nodes_in_group("shadows"):
+		if shadow.position == target_pos:
 			return true
 	return false
